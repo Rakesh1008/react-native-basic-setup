@@ -1,10 +1,12 @@
-import { TextInput, Button, View, StyleSheet, Alert, Text } from "react-native";
+import { TextInput, Button, View, StyleSheet, Alert, Text, Dimensions, useWindowDimensions, KeyboardAvoidingView } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useState } from "react";
 import Card from "../components/card";
 
 function StartGameScreen({ onPickNumber }) {
     const [enteredNumber, setEnteredNumber] = useState("");
+
+    const { width, height } = useWindowDimensions();
 
     const numberInputHandler = (textNumber) => {
         setEnteredNumber(textNumber)
@@ -26,8 +28,11 @@ function StartGameScreen({ onPickNumber }) {
         onPickNumber(chooseNumber)
     }
 
+    const marginTopSize = height < 380 ? 30 : 50;
+
     return (
-        <View style={styles.rootContainer}>
+        // <KeyboardAvoidingView style={{flex:1}}>
+            <View style={[styles.rootContainer, {marginTop: marginTopSize}]}>
             <Card>
                 <Text style={styles.textStyles}>Select a Number</Text>
                 <TextInput
@@ -47,15 +52,18 @@ function StartGameScreen({ onPickNumber }) {
                 </View>
             </Card>
         </View>
+        // </KeyboardAvoidingView>
     )
 }
 
 export default StartGameScreen;
 
+// const DimensionsHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
-        marginTop: 30,
+        marginTop: 60,
         alignItems: 'center'
     },
     textStyles: {

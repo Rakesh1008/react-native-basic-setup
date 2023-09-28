@@ -4,7 +4,8 @@ import {
   StyleSheet,
   ImageBackground,
   Text,
-  SafeAreaView
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
 import StartGameScreen from './screens/StartGameScreen';
 import LinearGradient from 'react-native-linear-gradient';
@@ -32,23 +33,26 @@ function App() {
   }
 
   return (
-    <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.appContainer}>
+    <>
+    <StatusBar backgroundColor="orange"/>
+      <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.appContainer}>
 
-      <View style={styles.pageTextContainer}>
-        <Text style={styles.pageText}>Guess a Number</Text>
-      </View>
-      <SafeAreaView style={styles.appContainer}>
-        <ImageBackground source={require('./assets/backGround.jpg')}
-          style={styles.appContainer}
-          imageStyle={styles.imageContainer}
-        >
-          {
-            (gameIsOver && userNumber) ? <GameIsOver roundsNumber={guessRoundNumber} userNumber={userNumber} onStartNewGame={startNewGameHanlder} /> :
-              userNumber ? <GameScreen userNumber={userNumber} isGameOver = {GameOverHandler} /> : <StartGameScreen onPickNumber={pickedNumberHandler} />
-          }
-        </ImageBackground>
-      </SafeAreaView>
-    </LinearGradient>
+        <View style={styles.pageTextContainer}>
+          <Text style={styles.pageText}>Guess a Number</Text>
+        </View>
+        <SafeAreaView style={styles.appContainer}>
+          <ImageBackground source={require('./assets/backGround.jpg')}
+            style={styles.appContainer}
+            imageStyle={styles.imageContainer}
+          >
+            {
+              (gameIsOver && userNumber) ? <GameIsOver roundsNumber={guessRoundNumber} userNumber={userNumber} onStartNewGame={startNewGameHanlder} /> :
+                userNumber ? <GameScreen userNumber={userNumber} isGameOver={GameOverHandler} /> : <StartGameScreen onPickNumber={pickedNumberHandler} />
+            }
+          </ImageBackground>
+        </SafeAreaView>
+      </LinearGradient>
+    </>
   );
 }
 

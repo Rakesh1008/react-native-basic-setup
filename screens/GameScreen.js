@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Alert, FlatList, ScrollView } from "react-native";
+import { Text, View, StyleSheet, Alert, FlatList, ScrollView, useWindowDimensions, StatusBar } from "react-native";
 import Title from "../components/Title";
 import { useEffect, useState } from "react";
 import NumberContainer from "../components/NumberContainer";
@@ -24,6 +24,7 @@ function GameScreen({ userNumber, isGameOver }) {
     const initialGuess = GenerateRandomNumber(minBoundry, maxBoundry, userNumber)
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [guessRounds, setGuessRounds] = useState([initialGuess])
+    const { width, height } = useWindowDimensions();
 
     useEffect(() => {
         if (currentGuess === userNumber) {
@@ -56,30 +57,51 @@ function GameScreen({ userNumber, isGameOver }) {
         const guessRoundNumber = guessRounds.length;
         console.log("guessRoundNumber", guessRoundNumber)
     }
-    return (
-        <View style={styles.GameScreen}>
-            <Title>Opponents's Guess</Title>
-            <NumberContainer>{currentGuess}</NumberContainer>
-            <Card>
-                <View style={styles.ButtonsContainer}>
+
+    let container = <>
+        <NumberContainer>{currentGuess}</NumberContainer>
+        <Card>
+            <View style={styles.ButtonsContainer}>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton style={styles.cascadingStyle} onPress={nextGuessHandler.bind(this, 'lower')}>-</PrimaryButton>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton style={styles.cascadingStyle} onPress={nextGuessHandler.bind(this, 'greater')}>+</PrimaryButton>
+                </View>
+            </View>
+        </Card>
+    </>
+
+    if (width > 730) {
+        container =
+            <>
+                <View style={styles.landscapeButtonsContainer}>
                     <View style={styles.buttonContainer}>
                         <PrimaryButton style={styles.cascadingStyle} onPress={nextGuessHandler.bind(this, 'lower')}>-</PrimaryButton>
                     </View>
+                    <NumberContainer>{currentGuess}</NumberContainer>
                     <View style={styles.buttonContainer}>
                         <PrimaryButton style={styles.cascadingStyle} onPress={nextGuessHandler.bind(this, 'greater')}>+</PrimaryButton>
                     </View>
                 </View>
-            </Card>
+            </>
+    }
+    return (
+        <>
+        <View style={styles.GameScreen}>
+            <Title>Opponents's Guess</Title>
+            {container}
             {/* <ScrollView > */}
             <View>
-                    <FlatList data={guessRounds} renderItem={(itemData) =>
-                        // <Text key={itemData.item}>{itemData.item}</Text>} 
-                        <GuessLogItems  guess={itemData.item} />}
-                        keyExtractor={(item) => item}
-                    />
+                <FlatList data={guessRounds} renderItem={(itemData) =>
+                    // <Text key={itemData.item}>{itemData.item}</Text>} 
+                    <GuessLogItems guess={itemData.item} />}
+                    keyExtractor={(item) => item}
+                />
             </View>
             {/* </ScrollView> */}
         </View>
+        </>
     )
 }
 
@@ -99,5 +121,9 @@ const styles = StyleSheet.create({
     cascadingStyle: {
         width: "60%",
         marginLeft: 40
+    },
+    landscapeButtonsContainer:{
+        flexDirection: "row",
+        alignItems: "center"
     }
 })
