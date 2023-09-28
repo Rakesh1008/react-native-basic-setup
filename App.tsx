@@ -1,66 +1,38 @@
 import React, { useState } from 'react';
 import {
-  Button,
-  FlatList,
+  Text,
   StyleSheet,
   View,
+  StatusBar,
 } from 'react-native';
+import CategoriesScreen from './screen/CategoriesScreen';
+import { NavigationContainer } from "@react-navigation/native"
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MealsOverviewScreen from './screen/mealsOverviewScreen';
 
-import GoalItem from './components/GoalItem';
-import GoalInput from './components/GoalInput';
-
+const Stack = createNativeStackNavigator();
 function App() {
-
-  const [courceGoals, setCourceGoals] = useState([]);
-  const [modelIsVisible, setModelIsVisible] = useState(false);
-
-  const addGoalHandler = (enterGoalText) => {
-    setCourceGoals((currentCourceGoals) => [
-      ...currentCourceGoals,
-      { text: enterGoalText, id: Math.random().toString() }
-    ]);
-  }
-
-  const goalItemPressHandler = (id) => {
-    setCourceGoals((currentCourceGoals) => {
-      return currentCourceGoals.filter((goals) => goals.id != id);
-    })
-  }
-
-  const startAddGoalHandler = () => {
-    setModelIsVisible(true)
-  }
-
   return (
-    <View style={styles.appContainer}>
-      <Button
-        title='all new model'
-        color="#5e0acc"
-        onPress={startAddGoalHandler}
-      />
-      <GoalInput visible={modelIsVisible} onAddGoal={addGoalHandler} />
-      <View style={styles.goalContainer}>
-        <FlatList data={courceGoals} renderItem={(itemData) => {
-          return (
-            <GoalItem
-              item={itemData.item.text}
-              id={itemData.item.id}
-              onDeleted={goalItemPressHandler} />
-          )
-        }} alwaysBounceVertical={false} />
-      </View>
-    </View>
+    <>
+      <StatusBar backgroundColor="orange" barStyle="dark-content" />
+      {/* <View style={styles.appContainer}> */}
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="MealsCategories">
+            <Stack.Screen name="MealsCategories" component={CategoriesScreen}/>
+            <Stack.Screen name='MealsOverview' component={MealsOverviewScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      {/* </View> */}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    paddingTop: 50,
-    paddingHorizontal: 16
-  },
-  goalContainer: {
-    flex: 5
+    paddingTop: 20,
+    paddingHorizontal: 16,
+    backgroundColor: "#24180f"
   },
 });
 
